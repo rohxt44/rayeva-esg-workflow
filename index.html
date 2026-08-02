@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rayeva ESG Advisory &amp; Recycling Platform — Workflow Demo</title>
+<style>
+  :root {
+    --purple: #3C3489; --purple-bg: #EEEDFE;
+    --teal: #085041; --teal-bg: #E1F5EE;
+    --coral: #712B13; --coral-bg: #FAECE7;
+    --ink: #26211C; --muted: #5F5E5A; --line: #E4E2DA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #FBFAF7; color: var(--ink);
+  }
+  header {
+    padding: 40px 24px 24px; text-align: center; border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+  header h1 { font-size: 26px; margin: 0 0 8px; font-weight: 600; }
+  header p { color: var(--muted); margin: 0; font-size: 15px; }
+  .legend { display: flex; justify-content: center; gap: 20px; padding: 16px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 20px 60px; }
+  .stage {
+    border: 1px solid var(--line); border-radius: 12px; margin-bottom: 14px;
+    background: #fff; cursor: pointer; overflow: hidden; transition: box-shadow .15s ease;
+  }
+  .stage:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .stage-head { display: flex; align-items: center; gap: 14px; padding: 16px 18px; }
+  .num {
+    width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0;
+  }
+  .stage-title { font-weight: 600; font-size: 16px; }
+  .stage-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .chev { margin-left: auto; color: var(--muted); transition: transform .15s ease; font-size: 14px; }
+  .stage.open .chev { transform: rotate(90deg); }
+  .stage-body {
+    max-height: 0; overflow: hidden; transition: max-height .2s ease;
+    padding: 0 18px; font-size: 14px; color: var(--muted); line-height: 1.6;
+  }
+  .stage.open .stage-body { max-height: 200px; padding: 0 18px 18px; }
+  .stage-body b { color: var(--ink); }
+  .phase-purple .num { background: var(--purple-bg); color: var(--purple); }
+  .phase-teal .num { background: var(--teal-bg); color: var(--teal); }
+  .phase-coral .num { background: var(--coral-bg); color: var(--coral); }
+  .connector { width: 2px; height: 14px; background: var(--line); margin: -14px auto 0 34px; }
+  footer { text-align: center; padding: 30px 20px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Corporate ESG Advisory &amp; Recycling Management</h1>
+  <p>Interactive workflow demo — Rayeva internship assignment · click a stage to expand</p>
+</header>
+
+<div class="legend">
+  <span><i class="dot" style="background:#3C3489"></i> Onboarding</span>
+  <span><i class="dot" style="background:#085041"></i> Execution</span>
+  <span><i class="dot" style="background:#712B13"></i> Closure &amp; growth</span>
+</div>
+
+<div class="container" id="stages"></div>
+
+<footer>Static demo built for the Rayeva assignment · deploy via GitHub Pages, Netlify, or Vercel</footer>
+
+<script>
+const stages = [
+  { n:1, phase:"purple", title:"Corporate lead", sub:"Company enquires about ESG services",
+    detail:"<b>Actors:</b> Corporate client, Rayeva sales.<br><b>Flow:</b> Enquiry &rarr; qualified lead. Entry point of the funnel." },
+  { n:2, phase:"purple", title:"ESG assessment", sub:"Audit of current waste and sustainability",
+    detail:"<b>Actors:</b> Rayeva team, corporate.<br><b>Flow:</b> Company data &rarr; baseline audit. Sets the factual foundation for recommendations." },
+  { n:3, phase:"purple", title:"AI recommendations", sub:"Engine suggests targets and materials",
+    detail:"<b>Actors:</b> AI recommendation engine.<br><b>Flow:</b> Baseline audit &rarr; prioritised action list." },
+  { n:4, phase:"purple", title:"Proposal", sub:"Scope, cost and timeline sent",
+    detail:"<b>Actors:</b> Rayeva sales.<br><b>Flow:</b> Recommendations &rarr; formal, priced proposal." },
+  { n:5, phase:"teal", title:"Procurement", sub:"Contract or purchase order finalised",
+    detail:"<b>Actors:</b> Corporate procurement, Rayeva.<br><b>Flow:</b> Proposal &rarr; signed contract/PO." },
+  { n:6, phase:"teal", title:"Payment", sub:"Corporate pays platform",
+    detail:"<b>Actors:</b> Corporate finance.<br><b>Flow:</b> Contract &rarr; funds received. Unlocks execution." },
+  { n:7, phase:"teal", title:"Recycler assignment", sub:"Best-match verified partner assigned",
+    detail:"<b>Actors:</b> Rayeva ops, recycler network.<br><b>Flow:</b> Contract scope &rarr; assigned recycler." },
+  { n:8, phase:"teal", title:"Recycling verification", sub:"Proof and compliance documents generated",
+    detail:"<b>Actors:</b> Recycler, Rayeva ops.<br><b>Flow:</b> Recycling activity &rarr; verified proof/certificate." },
+  { n:9, phase:"coral", title:"Commission and payouts", sub:"Platform commission deducted, recycler paid",
+    detail:"<b>Actors:</b> Rayeva finance.<br><b>Flow:</b> Verified job &rarr; recycler payout." },
+  { n:10, phase:"coral", title:"ESG reporting", sub:"Impact report for corporate compliance",
+    detail:"<b>Actors:</b> Rayeva, corporate.<br><b>Flow:</b> Verified data &rarr; impact report (CO2 saved, waste diverted)." },
+  { n:11, phase:"coral", title:"Referral program", sub:"New leads earn incentives",
+    detail:"<b>Actors:</b> Corporate, recycler, Rayeva.<br><b>Flow:</b> Referral &rarr; new lead + incentive payout." },
+];
+
+const container = document.getElementById("stages");
+stages.forEach((s, i) => {
+  const el = document.createElement("div");
+  el.className = "stage phase-" + s.phase;
+  el.innerHTML = `
+    <div class="stage-head">
+      <div class="num">${s.n}</div>
+      <div>
+        <div class="stage-title">${s.title}</div>
+        <div class="stage-sub">${s.sub}</div>
+      </div>
+      <div class="chev">&#9656;</div>
+    </div>
+    <div class="stage-body">${s.detail}</div>
+  `;
+  el.addEventListener("click", () => el.classList.toggle("open"));
+  container.appendChild(el);
+  if (i < stages.length - 1) {
+    const conn = document.createElement("div");
+    conn.className = "connector";
+    container.appendChild(conn);
+  }
+});
+</script>
+
+</body>
+</html>
